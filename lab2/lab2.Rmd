@@ -68,27 +68,26 @@ ggplot(trends_pivot, aes(x=date, y=hurricane, fill = n)) +
 
 #Create a data frame (using tibble() or data.frame()) that includes the dates that each hurricane made landfall. Annotate one of your first two plots to include these reference points with vertical lines (Hint: use geom_vline(), specifying the data source for this layer as this new dataset). You do not have to include text annotations - just the vertical lines, but if you would like to try, look into geom_text() or geom_label(). 
 
-landfall <- tibble(Hurricane = c("Harvey", "Irma", "Jose", "Maria"), Date = c("August 25, 2017", "September 10, 2017", "Did not make landfall", "September 20, 2017" ))
+landfall <- tibble(Hurricane = c("Harvey", "Irma", "Jose", "Maria"), Date = c("August 25, 2017", "September 10, 2017", "Did not make landfall", "September 20, 2017" ), numdate = c("2017-8-25", "2017-9-10", "NA", "2017-9-20"))
 
 
-ggplot(trends_pivot, aes(date, n)) +
-	geom_ribbon(aes(x=date, y=n, ymin=n - 1, ymax=n +1, fill = hurricane, color = hurricane, linetype = hurricane)) +
-	geom_area(aes(fill = hurricane)) +
-	geom_vline(
-    aes(xintercept = Date), data = landfall, color = "grey91", 
-    size = .6)
-	
-	
-	
-	geom_text(
-    aes(x = Date, y = Hurricane, label = Hurricane), 
-    data = landfall, 
-    size = 3, vjust = 0, hjust = 0, nudge_x = 50
-  ) + 
+ggplot(trends_pivot, aes(date, hurricane, fill = n)) +
+	geom_tile(aes(date, hurricane)) + 
+  geom_vline(aes(xintercept = numdate, color = Hurricane), 
+    data = landfall, alpha = 0.8)
+
+
+	geom_label(data=landfall, aes( x=numdate, y=Hurricane, label=landfall), 
+           color="orange", 
+           size=7 , angle=45, fontface="bold" )
+
+
   geom_line(aes(date, unemploy)) + 
   scale_fill_manual(values = c("blue", "red")) +
   xlab("date") + 
   ylab("unemployment")
+	
+
 
 
 ```
