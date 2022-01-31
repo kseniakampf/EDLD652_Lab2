@@ -144,7 +144,7 @@ ggplot(trends_pivot,
            size = 2.5)
 ```
 
-
+#part 2. Replicate the “National cable news networks” plot from the story using the tv_states data. Don’t worry about all the labels. Try to match the colors but don’t worry about getting them exact.
 
 ```{r tv_states}
 tv_states$date <- ymd(tv_states$date)
