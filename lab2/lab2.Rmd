@@ -42,7 +42,6 @@ trends_pivot <- trends %>%
 		names_prefix = "hurricane_"
 	) 
 
-
 ggplot(trends_pivot,aes(date, n)) +
 	geom_line(aes(color = Hurricane), alpha = .5, size = 2) +
 	scale_color_brewer(palette = "Dark2") +
@@ -144,6 +143,9 @@ ggplot(trends_pivot,
            color = "gray50",
            size = 2.5)
 ```
+
+
+
 ```{r tv_states}
 tv_states$date <- ymd(tv_states$date)
 
@@ -162,7 +164,6 @@ states_pivot <- states_pivot %>%
 
 states_pivot$state <- factor(states_pivot$state, levels = c("Florida", "Texas", "Puerto Rico"))
 
-
 labels_part2 <- tibble(event = c("Harvey", 
                                   "Irma", 
                                   "Maria",
@@ -176,7 +177,6 @@ labels_part2 <- tibble(event = c("Harvey",
                                 "2017-09-20",
                                 "2017-10-01"))
 
-
 labels3 <- tibble(x = c(ymd("2017-08-29"), 
                         ymd("2017-09-09"), 
                         ymd("2017-09-30")), 
@@ -184,8 +184,6 @@ labels3 <- tibble(x = c(ymd("2017-08-29"),
                  label = c("Texas", 
                            "Florida", 
                            "Puerto Rico"))
-
-
 
 ggplot(states_pivot, 
        aes(x = date, 
@@ -201,17 +199,20 @@ ggplot(states_pivot,
 	geom_area(aes(fill = state), color = "white", size = 0.4) +
 	theme_minimal() +
   scale_fill_manual(values = c("#d23586",  "#de743c", "#10c8dd")) +
-  scale_y_continuous(expand = c(0,0)) + 
+  scale_y_continuous(expand = c(0,0), labels = function(share) paste0(share,"%")) + 
   labs(x = element_blank(), 
        y = "Share of sentences", 
        title = "National cable news network", 
-       caption = "Includes Bloomberg, CNBC, CNN, Fox Business, Fox News and MSNBC") +
+       caption = "Includes Bloomberg, CNBC, CNN, Fox Business, Fox News and MSNBC.") +
   geom_vline(aes(xintercept = ymd(numdate)), 
              data = labels_part2, 
              linetype = 'dotted',
              alpha = 0.4) +
   geom_label(data = labels_part2, 
-             aes(x = c(ymd(numdate[1]), ymd("2017-09-14"), ymd(numdate[3]), ymd(numdate[4])), 
+             aes(x = c(ymd(numdate[1]), 
+                       ymd("2017-09-14"), 
+                       ymd(numdate[3]), 
+                       ymd(numdate[4])), 
                  y = c(3.2, 3.4, 2.4, 3.05),
                  label = c("Harvey
  landfall", 
@@ -224,23 +225,23 @@ ggplot(states_pivot,
  fill = NULL), 
                  color = "gray50",
                  size = 4,
-                 fontface="italic",
+                 fontface = "italic",
                  label.size = NA) +
   geom_shadowtext(data = labels3, 
                   aes(x = x, 
-                 y = y,
-                 label = label), 
-                 color = "black",
-                 bg.color ="white",
-                 size = 5) +
+                      y = y,
+                      label = label), 
+                  color = "black",
+                  bg.color ="white",
+                  size = 5) +
   theme(panel.grid.minor.x = element_blank(), 
-  panel.grid.minor.y = element_blank(),
-  axis.line.x = element_line(size=0.5, color = "grey40"),
-  plot.title = element_text(hjust = 0.5, face = "bold"), 
-  axis.title.y = element_text(face = "bold"), 
-  axis.text = element_text(color="gray50", size=10),
-  plot.caption = element_text(hjust = 0),
-  legend.position = "none")
+        panel.grid.minor.y = element_blank(),
+        axis.line.x = element_line(size = 0.5, color = "grey40"),
+        plot.title = element_text(hjust = 0.5, face = "bold"), 
+        axis.title.y = element_text(face = "bold"), 
+        axis.text = element_text(color = "gray50", size = 10),
+        plot.caption = element_text(hjust = 0),
+        legend.position = "none")
 ```
 
 ### 3. Use the comic_characters dataset to visualize the proportion of different genders using at least three different methods. With your final visualization, make any additional modifications you think would help reduce the cognitive load necessary to comprehend the figure.
