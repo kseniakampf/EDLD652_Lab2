@@ -11,10 +11,12 @@ knitr::opts_chunk$set(echo = TRUE,
 
 #install.packages("fivethirtyeight")
 #remotes::install_github("fivethirtyeightdata/fivethirtyeightdata")
+#install.packages("shadowtext")
 library(fivethirtyeight)
 library(fivethirtyeightdata)
 library(tidyverse)
 library(lubridate)
+library(shadowtext)
 
 ```
 
@@ -36,6 +38,7 @@ trends_pivot <- trends %>%
 		names_repair = "check_unique",
 		names_prefix = "hurricane_"
 	) 
+
 
 ggplot(trends_pivot,aes(date, n)) +
 	geom_line(aes(color = Hurricane), alpha = .5, size = 2) +
@@ -135,5 +138,103 @@ ggplot(trends_pivot,
  Sep. 20")), 
            color = "gray50",
            size = 2.5)
+```
+```{r tv_states}
+tv_states$date <- ymd(tv_states$date)
+
+states_pivot <- tv_states %>% 
+	pivot_longer(!date,
+		names_to = "state",
+		values_to = "share")
+
+states_pivot <- states_pivot %>% 
+  mutate(
+    state = case_when(
+      state == "florida" ~ "Florida",
+      state == "texas" ~ "Texas",
+      state == "puerto_rico" ~ "Puerto Rico"
+    ))
+
+states_pivot$state <- factor(states_pivot$state, levels = c("Florida", "Texas", "Puerto Rico"))
+
+
+labels_part2 <- tibble(event = c("Harvey", 
+                                  "Irma", 
+                                  "Maria",
+                                 "Las Vegas"), 
+                    Date = c("August 25, 2017", 
+                             "September 10, 2017", 
+                             "September 20, 2017",
+                             "October 1, 2017"), 
+                    numdate = c("2017-08-25", 
+                                "2017-09-10", 
+                                "2017-09-20",
+                                "2017-10-01"))
+
+
+labels3 <- tibble(x = c(ymd("2017-08-29"), 
+                        ymd("2017-09-09"), 
+                        ymd("2017-09-30")), 
+                 y = c(0.9, 1.6, 1.6),
+                 label = c("Texas", 
+                           "Florida", 
+                           "Puerto Rico"))
+
+
+
+ggplot(states_pivot, 
+       aes(x = date, 
+           y = share)) +
+	geom_ribbon(aes(x = date, 
+	                y = share, 
+	                xmin = ymd("2017-08-15"), 
+	                ymin = share, 
+	                ymax = share,
+	                fill = state, 
+	                color = state, 
+	                linetype = state)) +
+	geom_area(aes(fill = state), color = "white", size = 0.4) +
+	theme_minimal() +
+  scale_fill_manual(values = c("#d23586",  "#de743c", "#10c8dd")) +
+  scale_y_continuous(expand = c(0,0)) + 
+  labs(x = element_blank(), 
+       y = "Share of sentences", 
+       title = "National cable news network", 
+       caption = "Includes Bloomberg, CNBC, CNN, Fox Business, Fox News and MSNBC") +
+  geom_vline(aes(xintercept = ymd(numdate)), 
+             data = labels_part2, 
+             linetype = 'dotted',
+             alpha = 0.4) +
+  geom_label(data = labels_part2, 
+             aes(x = c(ymd(numdate[1]), ymd("2017-09-14"), ymd(numdate[3]), ymd(numdate[4])), 
+                 y = c(3.2, 3.4, 2.4, 3.05),
+                 label = c("Harvey
+ landfall", 
+                           "Irma 
+ landfall", 
+                           "Maria 
+ landfall",
+                            "Las Vegas
+ shooting"),
+ fill = NULL), 
+                 color = "gray50",
+                 size = 4,
+                 fontface="italic",
+                 label.size = NA) +
+  geom_shadowtext(data = labels3, 
+                  aes(x = x, 
+                 y = y,
+                 label = label), 
+                 color = "black",
+                 bg.color ="white",
+                 size = 5) +
+  theme(panel.grid.minor.x = element_blank(), 
+  panel.grid.minor.y = element_blank(),
+  axis.line.x = element_line(size=0.5, color = "grey40"),
+  plot.title = element_text(hjust = 0.5, face = "bold"), 
+  axis.title.y = element_text(face = "bold"), 
+  axis.text = element_text(color="gray50", size=10),
+  plot.caption = element_text(hjust = 0),
+  legend.position = "none")
 ```
 
