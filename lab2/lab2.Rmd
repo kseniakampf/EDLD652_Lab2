@@ -178,9 +178,9 @@ labels_part2 <- tibble(event = c("Harvey",
                                 "2017-10-01"))
 
 labels3 <- tibble(x = c(ymd("2017-08-29"), 
-                        ymd("2017-09-09"), 
+                        ymd("2017-09-10"), 
                         ymd("2017-09-30")), 
-                 y = c(0.9, 1.6, 1.6),
+                 y = c(0.9, 1.5, 1.5),
                  label = c("Texas", 
                            "Florida", 
                            "Puerto Rico"))
@@ -191,14 +191,16 @@ ggplot(states_pivot,
 	geom_ribbon(aes(x = date, 
 	                y = share, 
 	                xmin = ymd("2017-08-15"), 
-	                ymin = share, 
+	                ymin = -Inf, 
 	                ymax = share,
 	                fill = state, 
 	                color = state, 
-	                linetype = state)) +
-	geom_area(aes(fill = state), color = "white", size = 0.4) +
+	                linetype = state),
+	            color = "white",
+	            size = 0.4, 
+	            linetype = "solid") +
 	theme_minimal() +
-  scale_fill_manual(values = c("#d23586",  "#de743c", "#10c8dd")) +
+  scale_fill_manual(values = c("#eb6083",  "#de743c", "#3bbac8")) +
   scale_y_continuous(expand = c(0,0), labels = function(share) paste0(share,"%")) + 
   labs(x = element_blank(), 
        y = "Share of sentences", 
@@ -207,7 +209,9 @@ ggplot(states_pivot,
   geom_vline(aes(xintercept = ymd(numdate)), 
              data = labels_part2, 
              linetype = 'dotted',
-             alpha = 0.4) +
+             size = 0.6,
+             alpha = 1, 
+             color = "grey80") +
   geom_label(data = labels_part2, 
              aes(x = c(ymd(numdate[1]), 
                        ymd("2017-09-14"), 
@@ -223,7 +227,7 @@ ggplot(states_pivot,
                             "Las Vegas
  shooting"),
  fill = NULL), 
-                 color = "gray50",
+                 color = "gray60",
                  size = 4,
                  fontface = "italic",
                  label.size = NA) +
