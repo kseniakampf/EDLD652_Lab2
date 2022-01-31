@@ -214,10 +214,10 @@ ggplot(states_pivot,
              color = "grey80") +
   geom_label(data = labels_part2, 
              aes(x = c(ymd(numdate[1]), 
-                       ymd("2017-09-14"), 
+                       ymd("2017-09-13"), 
                        ymd(numdate[3]), 
                        ymd(numdate[4])), 
-                 y = c(3.2, 3.4, 2.4, 3.05),
+                 y = c(3.2, 3.3, 2.4, 3.05),
                  label = c("Harvey
  landfall", 
                            "Irma 
