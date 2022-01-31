@@ -144,7 +144,7 @@ ggplot(trends_pivot,
            size = 2.5)
 ```
 
-#part 2. Replicate the “National cable news networks” plot from the story using the tv_states data. Don’t worry about all the labels. Try to match the colors but don’t worry about getting them exact.
+### part 2. Replicate the “National cable news networks” plot from the story using the tv_states data. Don’t worry about all the labels. Try to match the colors but don’t worry about getting them exact.
 
 ```{r tv_states}
 tv_states$date <- ymd(tv_states$date)
@@ -214,7 +214,7 @@ ggplot(states_pivot,
              color = "grey80") +
   geom_label(data = labels_part2, 
              aes(x = c(ymd(numdate[1]), 
-                       ymd("2017-09-13"), 
+                       ymd("2017-09-14"), 
                        ymd(numdate[3]), 
                        ymd(numdate[4])), 
                  y = c(3.2, 3.3, 2.4, 3.05),
